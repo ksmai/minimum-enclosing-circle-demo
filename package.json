@@ -10,6 +10,7 @@
     "phaser": "^3.11.0"
   },
   "devDependencies": {
+    "babel-preset-stage-2": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
