@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import Grid from './grid.js';
 import Points from './points.js';
+import MinCircle from './min-circle.js';
 import Config from './config.js';
 const config = Config.getInstance();
 
@@ -16,6 +17,7 @@ export default class Scene extends Phaser.Scene {
     window.addEventListener('resize', this.windowOnResize.bind(this));
     this.grid = new Grid(this);
     this.points = new Points(this);
+    this.minCircle = new MinCircle(this);
   }
 
   create() {
@@ -28,6 +30,7 @@ export default class Scene extends Phaser.Scene {
       config.fullHeight * 3/ 4,
     );
     this.points.draw();
+    this.minCircle.solve(this.points.points.map(p => p.point));
   }
 
   update() {

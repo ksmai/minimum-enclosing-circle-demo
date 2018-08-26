@@ -47,6 +47,8 @@ class Config {
     } else {
       this.numRandomPoints = 20;
     }
+    this.circleColor  = this.colors[6];
+    this.circleLineWidth = 4;
   }
 }
 
