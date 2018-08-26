@@ -7,12 +7,7 @@ const config = Config.getInstance();
 
 export default class MinCircle extends Phaser.GameObjects.Graphics {
   constructor(scene) {
-    super(scene, {
-      lineStyle: {
-        width: config.circleLineWidth,
-        color: toIntColor(config.circleColor),
-      },
-    });
+    super(scene);
     scene.add.existing(this);
     this.circle = new Phaser.Geom.Circle(0, 0, 0);
     scene.input.on('pointerup', () => this.onClick());
@@ -32,15 +27,11 @@ export default class MinCircle extends Phaser.GameObjects.Graphics {
       if (boundaryPoints.length === 0) {
         const circle = new Phaser.Geom.Circle(0, 0, 0);
         this.circle = circle;
-        this.draw();
-        await this.sleep();
         return circle;
       } if (boundaryPoints.length === 1) {
         const [{ point: p }] = boundaryPoints;
         const circle = new Phaser.Geom.Circle(p.x, p.y, 0);
         this.circle = circle;
-        this.draw();
-        await this.sleep();
         return circle;
       } else if (boundaryPoints.length === 2) {
         const [{ point: p }, { point: q }] = boundaryPoints;
@@ -49,7 +40,6 @@ export default class MinCircle extends Phaser.GameObjects.Graphics {
         const circle = new Phaser.Geom.Circle(center.x, center.y, diameter / 2);
         this.circle = circle;
         this.draw();
-        await this.sleep();
         return circle;
       } else {
         const [{ point: p }, { point: q }, { point: r }, ...otherBoundaryPoints] = boundaryPoints;
@@ -64,6 +54,8 @@ export default class MinCircle extends Phaser.GameObjects.Graphics {
             throw new Error('Boundary points are not co-circular');
           }
         });
+        this.circle = circle;
+        this.draw();
         return circle;
       }
     }
@@ -71,17 +63,35 @@ export default class MinCircle extends Phaser.GameObjects.Graphics {
     const i = Math.floor(Math.random() * points.length);
     const removedPoint = points[i];
     const reducedPoints = points.slice(0, i).concat(points.slice(i + 1));
+    removedPoint.setInactive();
+    this.draw();
     const d = await this.welzl(reducedPoints, boundaryPoints);
+    removedPoint.setActive();
+    this.draw();
+    await this.sleep();
     if (Phaser.Geom.Circle.ContainsPoint(d, removedPoint.point)) {
+      removedPoint.setNormal();
+      this.draw();
+      await this.sleep();
       return d;
     }
+    reducedPoints.forEach((point) => point.setNormal());
+    removedPoint.setBoundary();
+    boundaryPoints.forEach((point) => point.setBoundary());
+    this.draw();
+    await this.sleep();
     return await this.welzl(reducedPoints, boundaryPoints.concat(removedPoint));
   }
 
   draw() {
     this.clear();
+    if (this.done) {
+      this.lineStyle(config.circleLineWidth, toIntColor(config.circleColor), 1);
+    } else {
+      this.lineStyle(config.circleLineWidth, toIntColor(config.circleColor), config.circlePartialAlpha);
+    }
     this.strokeCircleShape(this.circle);
-    this.scene.events.emit('drawMinCircle');
+    this.scene.events.emit('redrawPoints');
   }
 
   sleep() {

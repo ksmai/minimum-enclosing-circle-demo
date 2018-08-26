@@ -38,6 +38,9 @@ class Config {
     this.gridLineWidth = 2;
     this.gridLineSpacing = 50;
     this.pointNormalColor = this.colors[7];
+    this.pointInactiveColor = this.colors[3];
+    this.pointBoundaryColor = this.colors[8];
+    this.pointActiveColor = this.colors[9];
     this.pointSize = 8;
     this.pointAlpha = 0.5;
     this.pointLineWidth = 2;
@@ -49,10 +52,11 @@ class Config {
     }
     this.circleColor  = this.colors[6];
     this.circleLineWidth = 4;
+    this.circlePartialAlpha = 0.5;
     const animationMatches = window.location.href.match(/[?&]auto=(\d+)/);
-    if (animationMatches && animationMatches[0]) {
+    if (animationMatches && animationMatches[1]) {
       this.animated = true;
-      this.animationInterval = parseInt(animationMatches[0]);
+      this.animationInterval = parseInt(animationMatches[1]);
     } else {
       this.animated = false;
       this.animationInterval = 0;

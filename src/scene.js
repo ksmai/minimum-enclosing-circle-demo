@@ -18,7 +18,7 @@ export default class Scene extends Phaser.Scene {
     this.grid = new Grid(this);
     this.points = new Points(this);
     this.minCircle = new MinCircle(this);
-    this.events.on('drawMinCircle', this.onDrawMinCircle, this);
+    this.events.on('redrawPoints', this.onDrawMinCircle, this);
   }
 
   create() {
