@@ -49,6 +49,14 @@ class Config {
     }
     this.circleColor  = this.colors[6];
     this.circleLineWidth = 4;
+    const animationMatches = window.location.href.match(/[?&]auto=(\d+)/);
+    if (animationMatches && animationMatches[0]) {
+      this.animated = true;
+      this.animationInterval = parseInt(animationMatches[0]);
+    } else {
+      this.animated = false;
+      this.animationInterval = 0;
+    }
   }
 }
 

@@ -18,6 +18,7 @@ export default class Scene extends Phaser.Scene {
     this.grid = new Grid(this);
     this.points = new Points(this);
     this.minCircle = new MinCircle(this);
+    this.events.on('drawMinCircle', this.onDrawMinCircle, this);
   }
 
   create() {
@@ -27,10 +28,10 @@ export default class Scene extends Phaser.Scene {
       config.fullWidth / 4,
       config.fullWidth * 3 / 4,
       config.fullHeight / 4,
-      config.fullHeight * 3/ 4,
+      config.fullHeight * 3 / 4,
     );
     this.points.draw();
-    this.minCircle.solve(this.points.points.map(p => p.point));
+    this.minCircle.solve(this.points.points);
   }
 
   update() {
@@ -45,5 +46,9 @@ export default class Scene extends Phaser.Scene {
     this.sys.game.resize(config.fullWidth, config.fullHeight);
     this.grid.createGridLines();
     this.grid.draw();
+  }
+
+  onDrawMinCircle() {
+    this.points.draw();
   }
 }

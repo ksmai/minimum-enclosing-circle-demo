@@ -38,3 +38,9 @@ export function bisector(p, q) {
     return new Phaser.Geom.Line(midpoint.x, 0, midpoint.x, 65536);
   }
 }
+
+export function sleep(time) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
