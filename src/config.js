@@ -37,11 +37,16 @@ class Config {
     this.gridLineColor = this.colors[1];
     this.gridLineWidth = 2;
     this.gridLineSpacing = 50;
-    this.pointColor = this.colors[7];
+    this.pointNormalColor = this.colors[7];
     this.pointSize = 8;
     this.pointAlpha = 0.5;
     this.pointLineWidth = 2;
-    this.numPoints = 20;
+    const numInputMatches = window.location.href.match(/[?&]n=(\d+)/);
+    if (numInputMatches && numInputMatches[1]) {
+      this.numRandomPoints = parseInt(numInputMatches[1]);
+    } else {
+      this.numRandomPoints = 20;
+    }
   }
 }
 
